@@ -193,12 +193,13 @@ if __name__ == '__main__':
     user = ''
     password = ''
     token = ''
-    
+    instance = ''
+
     ##example data. needs to be row dict format
     data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
         {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]
 
-    sfdc = SalesforceTo(user, password, token, "na14")
+    sfdc = SalesforceTo(user, password, token, instance)
     sfdc.update("Account", data)
     ##----------------
     
