@@ -86,7 +86,7 @@ if __name__ == '__main__':
                 security_token = security_token)
     '''
     sfdc = SalesforceConnector()
-    #print sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
+    print sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
 
     data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
         {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]
