@@ -13,8 +13,8 @@ class SalesforceConnector:
         self.sandbox = kwargs.get('sandbox', False)
         self.proxies = kwargs.get('proxies')
 
-        if os.path.exists("bulk_settings"):
-            creds = pickle.loads(open("bulk_settings").read())
+        if os.path.exists("../bulk_settings"):
+            creds = pickle.loads(open("../bulk_settings").read())
             username = creds['username']
             password = creds['password']
             security_token = creds['security_token']
@@ -47,7 +47,7 @@ class SalesforceConnector:
         self.bulk = SalesforceBulk(sessionId= self.session_id, host = self.sf_instance)
 
     def saveLogin(self, username, password, security_token):
-        with open("bulk_settings", "w") as f:
+        with open("../bulk_settings", "w") as f:
             f.write(pickle.dumps(
                     dict(password = password, 
                     username = username, 
@@ -91,4 +91,4 @@ if __name__ == '__main__':
     data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
         {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]
     sfdc.update('Account', data, contentType = 'CSV')
-    '''
+    
