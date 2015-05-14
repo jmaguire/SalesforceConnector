@@ -6,3 +6,9 @@ requires simple_salesforce
 
 Limitations:
   Uses full login credentials. 
+  
+Usage:
+  From same directory: 
+    from OhioSyncExample import SalesforceFrom
+    sf = SalesforceFrom(user, pwd, token)
+    sf = SalesforceTo(user, pwd, token, instance)
