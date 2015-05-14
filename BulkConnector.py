@@ -7,14 +7,17 @@ import os
 from time import sleep
 from salesforce_bulk import CsvDictsAdapter
 
+
+credentials = "../bulk_settings"
+
 class SalesforceConnector:
     def __init__(self, **kwargs):
         self.sf_version = kwargs.get('version', '29.0')
         self.sandbox = kwargs.get('sandbox', False)
         self.proxies = kwargs.get('proxies')
 
-        if os.path.exists("../bulk_settings"):
-            creds = pickle.loads(open("../bulk_settings").read())
+        if os.path.exists(credentials):
+            creds = pickle.loads(open(credentials).read())
             username = creds['username']
             password = creds['password']
             security_token = creds['security_token']
@@ -47,7 +50,7 @@ class SalesforceConnector:
         self.bulk = SalesforceBulk(sessionId= self.session_id, host = self.sf_instance)
 
     def saveLogin(self, username, password, security_token):
-        with open("../bulk_settings", "w") as f:
+        with open(credentials, "w") as f:
             f.write(pickle.dumps(
                     dict(password = password, 
                     username = username, 
