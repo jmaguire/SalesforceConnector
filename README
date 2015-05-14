@@ -1,0 +1,8 @@
+Salesforce to python connector. Allows REST exports and BULK inserts
+
+requires simple_salesforce 
+  (https://pypi.python.org/pypi/simple-salesforce)
+  (https://github.com/heroku/simple-salesforce)
+
+Limitations:
+  Uses full login credentials. 
