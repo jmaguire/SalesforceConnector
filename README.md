@@ -41,14 +41,15 @@ requires salesforce_bulk
                 password = password, 
                 security_token = security_token)
         //subsequent login information saved in credentials, a file specified by the user in BulkConnector.py
-        ```
+        
     Subsequent login:
-    	```
+    	
         sfdc = SalesforceConnector()
-        ```
+        
 
     Example actions:
-        ````
+        
         data = sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
         sfdc.update('Account', data, contentType = 'CSV')
-        ````
+        
+    ```
