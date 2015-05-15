@@ -34,8 +34,11 @@ requires salesforce_bulk
   (https://github.com/heroku/salesforce-bulk)
    ```
 ###Usage
+
+```
     First login:
-    	```
+    
+    	
         from BulkConnector import SalesforceConnector
         sfdc = SalesforceConnector(username = username, 
                 password = password, 
