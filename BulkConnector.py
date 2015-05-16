@@ -8,14 +8,14 @@ from time import sleep
 from salesforce_bulk import CsvDictsAdapter
 
 
-credentials = "../bulk_settings"
+credentials = "../credentials/bulk_settings"
 
 class SalesforceConnector:
     def __init__(self, **kwargs):
         self.sf_version = kwargs.get('version', '29.0')
         self.sandbox = kwargs.get('sandbox', False)
         self.proxies = kwargs.get('proxies')
-
+        print os.path.exists(credentials)
         if os.path.exists(credentials):
             creds = pickle.loads(open(credentials).read())
             username = creds['username']
@@ -56,16 +56,19 @@ class SalesforceConnector:
                     username = username, 
                     security_token = security_token)))
 
-
+    ##Returns csv dict
+    # Each row is a dictionary of column_header:row_value
     def query(self, sObject, queryString, contentType):
         job_id = self.bulk.create_query_job(sObject, contentType = contentType)
         batch_id = self.bulk.query(job_id, queryString)
         self.bulk.wait_for_batch(job_id, batch_id, timeout=120)
         self.bulk.close_job(job_id)
+        print 'job closed'
         result_id = self.bulk.get_batch_result_ids(batch_id,job_id)[0]
         result = [row for row in self.bulk.get_batch_results(batch_id = batch_id, result_id = result_id, job_id=job_id,
                           parse_csv=True)]
-        return result
+        csv_dict = [dict(zip(result[0],row)) for row in result[1:]]
+        return csv_dict
     
     def update(self, sObject, data, contentType):
         job_id = self.bulk.create_update_job(sObject, contentType='CSV')
