@@ -29,19 +29,22 @@ Salesforce to python uses BULK API for export and pushes
 
 ##Usage
 
-   #Without Credentials:
+   Without Credentials:
       
-        from BulkConnector import SalesforceConnector
-        sfdc = SalesforceConnector(username = username, 
+         from BulkConnector import SalesforceConnector
+         sfdc = SalesforceConnector(username = username, 
                 password = password, 
                 security_token = security_token)
       
-   #With Credentials login (Make sure the path in the .py file has been updated)
-   
-        sfdc = SalesforceConnector()
+   With Credentials login (Make sure the path in the .py file has been updated)
+         
+         At the start of the file add the path to credentials to the list credentials_files.
+         This is a list because I have a version running on a server and a version running locally
+         credential_files = ['./credentials']
+         sfdc = SalesforceConnector()
       
       
-   #Example actions:
+   Example actions:
     
          data = sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
         
