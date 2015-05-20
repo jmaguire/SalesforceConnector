@@ -8,14 +8,22 @@ from time import sleep
 from salesforce_bulk import CsvDictsAdapter
 
 
-credentials = "../credentials/bulk_settings"
+#credentials = '/Users/opengov/Documents/OpenGov/credentials/bulk_settings'
+#credentials = "../credentials/bulk_settings"
+credential_files = ['/home/ubuntu/credentials/bulk_settings','/Users/opengov/Documents/OpenGov/credentials/bulk_settings']
 
 class SalesforceConnector:
     def __init__(self, **kwargs):
         self.sf_version = kwargs.get('version', '29.0')
         self.sandbox = kwargs.get('sandbox', False)
         self.proxies = kwargs.get('proxies')
-        print os.path.exists(credentials)
+        
+        try:
+            credentials = [elem for elem in credential_files if os.path.exists(elem)][0]    
+        except:
+            raise ValueError('No credentials found')
+        #print credentials
+        #print os.path.exists(credentials)
         if os.path.exists(credentials):
             creds = pickle.loads(open(credentials).read())
             username = creds['username']
@@ -91,10 +99,10 @@ if __name__ == '__main__':
                 password = password, 
                 security_token = security_token)
     '''
-    sfdc = SalesforceConnector()
-    print sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
+    #sfdc = SalesforceConnector()
+    #print sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
 
-    data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
-        {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]
-    sfdc.update('Account', data, contentType = 'CSV')
+    ##data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
+    ##    {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]
+    ##sfdc.update('Account', data, contentType = 'CSV')
     
