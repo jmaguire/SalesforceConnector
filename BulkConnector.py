@@ -1,4 +1,5 @@
-from simple_salesforce.login import SalesforceLogin
+#from simple_salesforce.login import SalesforceLogin
+from SalesforceLogin import SalesforceLogin
 from simple_salesforce.util import date_to_iso8601, SalesforceError
 from salesforce_bulk import SalesforceBulk
 import getpass
@@ -8,8 +9,7 @@ from time import sleep
 from salesforce_bulk import CsvDictsAdapter
 
 
-#credentials = '/Users/opengov/Documents/OpenGov/credentials/bulk_settings'
-#credentials = "../credentials/bulk_settings"
+##List path to credentials
 credential_files = ['/home/ubuntu/credentials/bulk_settings','/Users/opengov/Documents/OpenGov/credentials/bulk_settings']
 
 class SalesforceConnector:
@@ -17,13 +17,13 @@ class SalesforceConnector:
         self.sf_version = kwargs.get('version', '29.0')
         self.sandbox = kwargs.get('sandbox', False)
         self.proxies = kwargs.get('proxies')
-        
+        self.domain = kwargs.get('domain', None)
+
         try:
             credentials = [elem for elem in credential_files if os.path.exists(elem)][0]    
         except:
             raise ValueError('No credentials found')
-        #print credentials
-        #print os.path.exists(credentials)
+        #Load Credentials from file
         if os.path.exists(credentials):
             creds = pickle.loads(open(credentials).read())
             username = creds['username']
@@ -35,9 +35,10 @@ class SalesforceConnector:
                 security_token=security_token,
                 sandbox=self.sandbox,
                 sf_version=self.sf_version,
-                proxies=self.proxies)
+                proxies=self.proxies,
+                domain = self.domain)
             print 'read credentials'
-
+        ##Read credentials from arguments
         elif 'username' in kwargs and 'password' in kwargs and 'security_token' in kwargs:
             self.auth_type = "password"
             username = kwargs['username']
@@ -49,12 +50,14 @@ class SalesforceConnector:
                 security_token=security_token,
                 sandbox=self.sandbox,
                 sf_version=self.sf_version,
-                proxies=self.proxies)
+                proxies=self.proxies,
+                domain = self.domain)
             self.saveLogin(username, password, security_token)
         else:
             raise TypeError(
                 'You must provide login information or an instance and token'
             )
+        print self.sf_instance     
         self.bulk = SalesforceBulk(sessionId= self.session_id, host = self.sf_instance)
 
     def saveLogin(self, username, password, security_token):
@@ -99,8 +102,8 @@ if __name__ == '__main__':
                 password = password, 
                 security_token = security_token)
     '''
-    #sfdc = SalesforceConnector()
-    #print sfdc.query(queryString = "select Id,LastName from Contact Limit 5", sObject = "Contact",contentType='CSV')
+    sfdc = SalesforceConnector()
+    print sfdc.query(queryString = "select Id, Name from Account Limit 5", sObject = "Account",contentType='CSV')
 
     ##data = [{'Id' : '001d000001kca1F', 'Ohio_Implementation__c' : 'Site Build'}, \
     ##    {'Id' : '001d000001es2fP', 'Ohio_Implementation__c' : 'Site Build'}]

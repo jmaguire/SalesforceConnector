@@ -10,6 +10,7 @@ import os
 #credentials = "../credentials/dropbox"
 #credentials = '/home/ubuntu/credentials/dropbox'
 credential_files = ['/home/ubuntu/credentials/dropbox','/Users/opengov/Documents/OpenGov/credentials/dropbox']
+localdB = '/home/ubuntu/LocaldB/'
 
 def queryOGAccountStatus():
     sfdc = SalesforceConnector()
@@ -30,14 +31,16 @@ def writeToDropbox(data):
     creds = pickle.loads(open(credentials).read())
     token = creds['token']
     client = dropbox.client.DropboxClient(token)
-    ## save locally
-    with open(filename, 'wb') as csvfile:
+    
+    ## Save file locally
+    with open(localdB + filename, 'wb') as csvfile:
         fieldnames = ['Id', 'OpenGov_ID__c', 'Ohio_Salesforce_ID__c', 'Ohio_Implementation__c', 'Ohio_Implementation_Details__c']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(data) 
-    ## save to dropbox
-    with open(filename, 'r') as f:
+
+    # Save to dropbox
+    with open(localdB + filename, 'r') as f:
         response = client.put_file('/' + filename, f)
         print response
         
